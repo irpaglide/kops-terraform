@@ -16,7 +16,7 @@ if [ "$?" == "0" ]; then
    --target=terraform \
    --out=. \
    --state=$(terraform output state_store)
-  echo "CLUSTER ALREADY DEFINED"
+  echo "CLUSTER EXISTS"
   exit 0
 else
   kops create secret \
