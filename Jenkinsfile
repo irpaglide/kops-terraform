@@ -2,7 +2,7 @@ pipeline {
     agent any
 
     parameters {
-        credentials(name: 'AWS_KEY_ID', description: 'AWS KEYS CREDENTIALS ID', defaultValue: 'jmgarciatest', credentialType: "Username with password", required: true ),
+        credentials(name: 'AWS_KEY_ID', description: 'AWS KEYS CREDENTIALS ID', defaultValue: 'jmgarciatest', credentialType: "Username with password", required: true )    
         choice(
             choices: ['create' , 'destroy'],
             description: '',
