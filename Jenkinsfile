@@ -83,7 +83,7 @@ pipeline {
             steps {
               withCredentials([[$class: 'AmazonWebServicesCredentialsBinding', credentialsId: "${params.AWS_KEY_ID}"]]) {
                 ansiColor('xterm') {
-                  sh './kops-verify.sh'
+                  sh './kops-validate.sh'
                 }
               }
             }
