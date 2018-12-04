@@ -51,6 +51,7 @@ pipeline {
             }
         }
         stage("Deploy kops cluster") {
+          status = "in progress"
           when {
                 expression { params.REQUESTED_ACTION == 'create' }
               }
@@ -65,6 +66,8 @@ pipeline {
             }
         }
         stage("Destroy cluster") {
+          status = "destroyed"
+
           when {
                 expression { params.REQUESTED_ACTION == 'destroy' }
               }
@@ -79,6 +82,7 @@ pipeline {
             }
         }
         stage("Verify cluster") {
+          status = "ready"
           when {
                 expression { params.REQUESTED_ACTION == 'verify' }
               }
@@ -97,11 +101,8 @@ pipeline {
       }
       success {
         script {
-          when {
-                expression { params.REQUESTED_ACTION == 'verify' }
-              }
           emailext (
-            subject: "YOUR CLUSTER IS READY",
+            subject: "YOUR CLUSTER IS ${status}",
             from: "jenkins-no-reply@irpaglide.com",
             to: "${params.NOTIFY_TO}",
             body: "Link to build: ${BUILD_URL}"
