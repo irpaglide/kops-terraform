@@ -4,7 +4,7 @@ pipeline {
     parameters {
         credentials(name: 'AWS_KEY_ID', description: 'AWS KEYS CREDENTIALS ID', defaultValue: 'jmgarciatest', credentialType: "Username with password", required: true )
         choice(
-            choices: ['create' , 'destroy'],
+            choices: ['create','verify','destroy'],
             description: '',
             name: 'REQUESTED_ACTION')
     }
@@ -72,6 +72,18 @@ pipeline {
                   sh './kops-delete.sh --yes'
                   sleep 20
                   sh '/usr/local/bin/terraform destroy --auto-approve'
+                }
+              }
+            }
+        }
+        stage("Verify cluster") {
+          when {
+                expression { params.REQUESTED_ACTION == 'verify' }
+              }
+            steps {
+              withCredentials([[$class: 'AmazonWebServicesCredentialsBinding', credentialsId: "${params.AWS_KEY_ID}"]]) {
+                ansiColor('xterm') {
+                  sh './kops-verify.sh'
                 }
               }
             }
