@@ -8,10 +8,13 @@ pipeline {
     stages {
         stage("Create Initial Infrastructure") {
             steps {
-              withCredentials([[$class: 'AmazonWebServicesCredentialsBinding', credentialsId: "${params.AWS_KEY_ID}"]]) {
                 sh 'pterrafile'
+            }
+            steps {
+              withCredentials([[$class: 'AmazonWebServicesCredentialsBinding', credentialsId: "${params.AWS_KEY_ID}"]]) {
+                sh 'terraform init'
               }
-          }
+            }
         }
     }
 }
