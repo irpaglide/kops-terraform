@@ -70,6 +70,7 @@ pipeline {
               withCredentials([[$class: 'AmazonWebServicesCredentialsBinding', credentialsId: "${params.AWS_KEY_ID}"]]) {
                 ansiColor('xterm') {
                   sh './kops-delete.sh --yes'
+                  sleep 20
                   sh '/usr/local/bin/terraform destroy --auto-approve'
                 }
               }
