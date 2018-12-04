@@ -1,3 +1,4 @@
 data/*
 *.plan
 .terraform
+tf-*
