@@ -30,11 +30,14 @@
 
 ### To Deploy Automatically:
 
-* First, clone the repository, go to the directory "permanent"
+* 1)
+  clone the repository, go to the directory "permanent"
+  configure the variables, plan and apply accordingly. you will need this information as datasources in the other files.
 
-configure the variables, plan and apply accordingly. you will need this information as datasources in the other files.
+* 2) configure variables in the root directory of the repo, commit and push.
 
-* There is a Declarative Jenkinsfile Pipeline that you can use in your jenkins server.
+* There is a Declarative Jenkinsfile Pipeline that you can use it in your jenkins server pointing a job to this repo.
+
 
 #### Dependencies in the Jenkinsfile:
 
