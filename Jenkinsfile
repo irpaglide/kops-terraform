@@ -10,6 +10,9 @@ pipeline {
         string(name: 'NOTIFY_TO',description: '',defaultValue: 'jmgarcia@irpaglide.com')
 
     }
+    environment {
+      def STATUS = ""
+    }
     stages {
         stage("Get Terraform Modules") {
             steps {
@@ -59,7 +62,7 @@ pipeline {
             steps {
 
               script {
-                    def status = "in progress"
+                    STATUS = "in progress"
 
               }
               withCredentials([[$class: 'AmazonWebServicesCredentialsBinding', credentialsId: "${params.AWS_KEY_ID}"]]) {
@@ -79,7 +82,7 @@ pipeline {
             steps {
               withCredentials([[$class: 'AmazonWebServicesCredentialsBinding', credentialsId: "${params.AWS_KEY_ID}"]]) {
                 script {
-                  def status = "destroyed"
+                   STATUS = "destroyed"
                 }
                 ansiColor('xterm') {
                   sh './kops-delete.sh --yes'
@@ -98,7 +101,7 @@ pipeline {
             steps {
               script {
 
-              def status = "ready"
+               STATUS = "ready"
             }
               withCredentials([[$class: 'AmazonWebServicesCredentialsBinding', credentialsId: "${params.AWS_KEY_ID}"]]) {
                 ansiColor('xterm') {
@@ -115,7 +118,7 @@ pipeline {
       success {
         script {
           emailext (
-            subject: "YOUR CLUSTER IS ${status}",
+            subject: "YOUR CLUSTER IS ${STATUS}",
             from: "jenkins-no-reply@irpaglide.com",
             to: "${params.NOTIFY_TO}",
             body: "Link to build: ${BUILD_URL}"
