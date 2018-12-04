@@ -26,4 +26,4 @@ PUBLIC_SUBNETS=$(terraform output public_subnet_ids|sed s/,//g|paste -s -d,)
       --subnets $PRIVATE_SUBNETS \
       --state $(terraform output state_store) \
       --out=. \
-      ${NAME}
+      --name ${NAME}
