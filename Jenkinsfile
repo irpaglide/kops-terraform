@@ -36,5 +36,15 @@ pipeline {
               }
             }
         }
+        stage("Deploy kops cluster") {
+            steps {
+              withCredentials([[$class: 'AmazonWebServicesCredentialsBinding', credentialsId: "${params.AWS_KEY_ID}"]]) {
+                ansiColor('xterm') {
+                  sh '/usr/local/bin/terraform plan -out kops.plan'
+                  sh '/usr/local/bin/terraform apply kops.plan'
+                }
+              }
+            }
+        }
     }
 }
