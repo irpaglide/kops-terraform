@@ -11,10 +11,6 @@ kops get cluster ${NAME} --state $(terraform output state_store)
 
 
 if [ "$?" == "0" ]; then
-  kops create secret \
-  --state $(terraform output state_store) \
-  --name ${NAME} \
-  sshpublickey admin -i ~/.ssh/id_rsa_kops.pub
 
    kops update cluster ${NAME} \
    --target=terraform \
@@ -23,7 +19,10 @@ if [ "$?" == "0" ]; then
   echo "CLUSTER ALREADY DEFINED"
   exit 0
 else
-
+  kops create secret \
+  --state $(terraform output state_store) \
+  --name ${NAME} \
+  sshpublickey admin -i ~/.ssh/id_rsa_kops.pub
 
   kops create cluster \
       --master-zones $ZONES \
@@ -39,8 +38,5 @@ else
       --out=. \
       --name ${NAME}
 
-      kops create secret \
-      --state $(terraform output state_store) \
-      --name ${NAME} \
-      sshpublickey admin -i ~/.ssh/id_rsa_kops.pub
+
 fi
