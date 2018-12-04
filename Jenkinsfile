@@ -32,7 +32,7 @@ pipeline {
         stage("KOPS Cluster Definition") {
             steps {
               withCredentials([[$class: 'AmazonWebServicesCredentialsBinding', credentialsId: "${params.AWS_KEY_ID}"]]) {
-                sh 'kops get cluster $(terraform output name_cluster) --state $(terraform output state_store) || ./kops-create.sh'
+                sh './kops-create.sh'
               }
             }
         }

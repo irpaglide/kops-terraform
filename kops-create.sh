@@ -6,6 +6,12 @@ NAME=$(terraform output name_cluster)
 PRIVATE_SUBNETS=$(terraform output private_subnet_ids|sed s/,//g|paste -s -d,)
 PUBLIC_SUBNETS=$(terraform output public_subnet_ids|sed s/,//g|paste -s -d,)
 
+kops get cluster ${NAME} --state $(terraform output state_store)
+if [ "$?" == "0" ]; then
+  echo "CLUSTER ALREADY DEFINED"
+  exit 0
+fi
+
 ssh-keygen -b 2048 -t rsa -f ~/.ssh/id_rsa_kops -q -N ""
 
 kops create secret \
