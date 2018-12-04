@@ -6,8 +6,9 @@ NAME=$(terraform output name_cluster)
 PRIVATE_SUBNETS=$(terraform output private_subnet_ids|sed s/,//g|paste -s -d,)
 PUBLIC_SUBNETS=$(terraform output public_subnet_ids|sed s/,//g|paste -s -d,)
 
-kops get cluster ${NAME} --state $(terraform output state_store)
+kops get cluster ${NAME}
 if [ "$?" == "0" ]; then
+   kops update cluster ${NAME} --yes --state=--state $(terraform output state_store)
   echo "CLUSTER ALREADY DEFINED"
   exit 0
 fi
