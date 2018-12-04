@@ -54,9 +54,14 @@ pipeline {
           when {
                 expression { params.REQUESTED_ACTION == 'create' }
               }
-              def status = "in progress"
+
 
             steps {
+
+              script {
+                    def status = "in progress"
+
+              }
               withCredentials([[$class: 'AmazonWebServicesCredentialsBinding', credentialsId: "${params.AWS_KEY_ID}"]]) {
                 ansiColor('xterm') {
                   sh '/usr/local/bin/terraform plan -out kops.plan'
@@ -70,10 +75,12 @@ pipeline {
           when {
                 expression { params.REQUESTED_ACTION == 'destroy' }
               }
-              def status = "destroyed"
 
             steps {
               withCredentials([[$class: 'AmazonWebServicesCredentialsBinding', credentialsId: "${params.AWS_KEY_ID}"]]) {
+                script {
+                  def status = "destroyed"
+                }
                 ansiColor('xterm') {
                   sh './kops-delete.sh --yes'
                   sleep 20
@@ -86,9 +93,13 @@ pipeline {
           when {
                 expression { params.REQUESTED_ACTION == 'verify' }
               }
-              def status = "ready"
+
 
             steps {
+              script {
+
+              def status = "ready"
+            }
               withCredentials([[$class: 'AmazonWebServicesCredentialsBinding', credentialsId: "${params.AWS_KEY_ID}"]]) {
                 ansiColor('xterm') {
                   sh './kops-validate.sh'
