@@ -7,6 +7,8 @@ pipeline {
             choices: ['verify','create','destroy'],
             description: '',
             name: 'REQUESTED_ACTION')
+        string(name: 'NOTIFY_TO',description: '',defaultValue: 'jmgarcia@irpaglide.com')
+
     }
     stages {
         stage("Get Terraform Modules") {
@@ -92,6 +94,16 @@ pipeline {
     post {
       always {
           deleteDir() /* clean up our workspace */
+      }
+      success {
+        script {
+          emailext (
+            subject: "YOUR CLUSTER IS READY",
+            from: "jenkins-no-reply@irpaglide.com",
+            to: "${params.NOTIFY_TO}",
+            body: "Link to build: ${BUILD_URL}"
+          )
+        }
       }
     }
 }
