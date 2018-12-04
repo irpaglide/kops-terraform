@@ -9,10 +9,7 @@ PUBLIC_SUBNETS=$(terraform output public_subnet_ids|sed s/,//g|paste -s -d,)
 #kops get cluster ${NAME} --state $(terraform output state_store)
 
   ssh-keygen -b 2048 -t rsa -f ~/.ssh/id_rsa_kops -q -N ""
-  kops create secret \
-  --state $(terraform output state_store) \
-  --name ${NAME} \
-  sshpublickey admin -i ~/.ssh/id_rsa_kops.pub
+
 
   kops create cluster \
       --master-zones $ZONES \
@@ -26,4 +23,8 @@ PUBLIC_SUBNETS=$(terraform output public_subnet_ids|sed s/,//g|paste -s -d,)
       --subnets $PRIVATE_SUBNETS \
       --state $(terraform output state_store) \
       --out=. \
-      --name ${NAME}
+      --name ${NAME} && \
+  kops create secret \
+  --state $(terraform output state_store) \
+  --name ${NAME} \
+  sshpublickey admin -i ~/.ssh/id_rsa_kops.pub
