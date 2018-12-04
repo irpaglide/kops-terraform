@@ -32,7 +32,7 @@ pipeline {
         stage("KOPS Cluster Definition") {
             steps {
               withCredentials([[$class: 'AmazonWebServicesCredentialsBinding', credentialsId: "${params.AWS_KEY_ID}"]]) {
-                sh './kops-create.sh'
+                sh 'ls kubernetes.tf || ./kops-create.sh'
               }
             }
         }
