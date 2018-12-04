@@ -5,6 +5,8 @@ ZONES=$(terraform output availability_zones|sed s/,//g | paste -s -d,)
 NAME=$(terraform output name_cluster)
 PRIVATE_SUBNETS=$(terraform output private_subnet_ids|sed s/,//g|paste -s -d,)
 PUBLIC_SUBNETS=$(terraform output public_subnet_ids|sed s/,//g|paste -s -d,)
+kops create secret \
+--name ${NAME} sshpublickey admin -i ~/.ssh/id_rsa_kops.pub
 
 kops create cluster \
     --master-zones $ZONES \
