@@ -5,6 +5,7 @@ pipeline {
         credentials(name: 'AWS_KEY_ID', description: 'AWS KEYS CREDENTIALS ID', defaultValue: 'jmgarciatest', credentialType: "Username with password", required: true )
     }
 
+
     stages {
         stage("Get Terraform Modules") {
             steps {
@@ -14,7 +15,7 @@ pipeline {
         stage("Initialize terraform") {
             steps {
               withCredentials([[$class: 'AmazonWebServicesCredentialsBinding', credentialsId: "${params.AWS_KEY_ID}"]]) {
-                sh 'terraform init'
+                sh '/usr/local/bin/terraform init'
               }
             }
         }
