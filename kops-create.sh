@@ -17,7 +17,7 @@ PUBLIC_SUBNETS=$(terraform output public_subnet_ids|sed s/,//g|paste -s -d,)
       --topology private \
       --dns-zone $(terraform output public_zone_id) \
       --networking calico \
-      --target=terraform
+      --target=terraform \
       --vpc $(terraform output vpc_id) \
       --utility-subnets $PUBLIC_SUBNETS \
       --subnets $PRIVATE_SUBNETS \
