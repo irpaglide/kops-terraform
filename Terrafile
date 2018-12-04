@@ -1,6 +1,6 @@
 tf-aws-module-vpc:
- source:  "git@github.com:irpaglide/tf-aws-module-vpc"
+ source:  "https://github.com/irpaglide/tf-aws-module-vpc.git"
  version: "0.0.1"
 tf-aws-module-subnet:
- source:  "git@github.com:irpaglide/tf-aws-module-subnet"
+ source:  "https://github.com/irpaglide/tf-aws-module-subnet.git"
  version: "0.0.1"
