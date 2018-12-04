@@ -7,6 +7,7 @@ RET=1
 until [ "$RET" == "0" ] ; do
 kops validate cluster \
     --name ${NAME} --state ${STATE} 2>&1  > /dev/null
+RET="$?"
 echo -n "."
 done
 echo
