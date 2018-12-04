@@ -11,25 +11,24 @@ if [ "$?" == "0" ]; then
    kops update cluster ${NAME} --yes --state=$(terraform output state_store)
   echo "CLUSTER ALREADY DEFINED"
   exit 0
+else
+  ssh-keygen -b 2048 -t rsa -f ~/.ssh/id_rsa_kops -q -N ""
+
+  kops create secret \
+  --state $(terraform output state_store) \
+  --name ${NAME} \
+  sshpublickey admin -i ~/.ssh/id_rsa_kops.pub
+
+  kops create cluster \
+      --master-zones $ZONES \
+      --zones $ZONES \
+      --topology private \
+      --dns-zone $(terraform output public_zone_id) \
+      --networking calico \
+      --vpc $(terraform output vpc_id) \
+      --utility-subnets $PUBLIC_SUBNETS \
+      --subnets $PRIVATE_SUBNETS \
+      --state $(terraform output state_store) \
+      --out=. \
+      ${NAME}
 fi
-
-ssh-keygen -b 2048 -t rsa -f ~/.ssh/id_rsa_kops -q -N ""
-
-kops create secret \
---state $(terraform output state_store) \
---name ${NAME} \
-sshpublickey admin -i ~/.ssh/id_rsa_kops.pub
-
-kops create cluster \
-    --master-zones $ZONES \
-    --zones $ZONES \
-    --topology private \
-    --dns-zone $(terraform output public_zone_id) \
-    --networking calico \
-    --vpc $(terraform output vpc_id) \
-    --utility-subnets $PUBLIC_SUBNETS \
-    --subnets $PRIVATE_SUBNETS \
-    --target=terraform \
-    --state $(terraform output state_store) \
-    --out=. \
-    ${NAME}
