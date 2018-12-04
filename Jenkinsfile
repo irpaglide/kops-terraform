@@ -2,7 +2,7 @@ pipeline {
     agent any
 
     parameters {
-        credentials(name: 'AWS_KEY_ID', description: 'AWS KEYS CREDENTIALS ID', defaultValue: 'jmgarciatest', credentialType: "Username with password", required: true )    
+        credentials(name: 'AWS_KEY_ID', description: 'AWS KEYS CREDENTIALS ID', defaultValue: 'jmgarciatest', credentialType: "Username with password", required: true )
         choice(
             choices: ['create' , 'destroy'],
             description: '',
@@ -33,6 +33,7 @@ pipeline {
                   sh '/usr/local/bin/terraform plan -out initial.plan'
                   sh '/usr/local/bin/terraform apply initial.plan'
                 }
+                sleep 15
               }
             }
         }
@@ -43,6 +44,7 @@ pipeline {
             steps {
               withCredentials([[$class: 'AmazonWebServicesCredentialsBinding', credentialsId: "${params.AWS_KEY_ID}"]]) {
                 sh './kops-create.sh'
+                sleep 30
               }
             }
         }
