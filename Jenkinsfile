@@ -97,6 +97,9 @@ pipeline {
       }
       success {
         script {
+          when {
+                expression { params.REQUESTED_ACTION == 'verify' }
+              }
           emailext (
             subject: "YOUR CLUSTER IS READY",
             from: "jenkins-no-reply@irpaglide.com",
