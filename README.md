@@ -30,6 +30,10 @@
 
 ### To Deploy Automatically:
 
+* First, clone the repository, go to the directory "permanent"
+
+configure the variables, plan and apply accordingly. you will need this information as datasources in the other files.
+
 * There is a Declarative Jenkinsfile Pipeline that you can use in your jenkins server.
 
 #### Dependencies in the Jenkinsfile:
