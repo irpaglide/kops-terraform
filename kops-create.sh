@@ -15,7 +15,10 @@ if [ "$?" == "0" ]; then
   --name ${NAME} \
   sshpublickey admin -i ~/.ssh/id_rsa_kops.pub
 
-   kops update cluster ${NAME} --yes --state=$(terraform output state_store)
+   kops update cluster ${NAME} \
+   --target=terraform \
+   --out=. \
+   --state=$(terraform output state_store)
   echo "CLUSTER ALREADY DEFINED"
   exit 0
 else
@@ -32,6 +35,7 @@ else
       --topology private \
       --dns-zone $(terraform output public_zone_id) \
       --networking calico \
+      --target=terraform
       --vpc $(terraform output vpc_id) \
       --utility-subnets $PUBLIC_SUBNETS \
       --subnets $PRIVATE_SUBNETS \
