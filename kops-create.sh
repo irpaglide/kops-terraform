@@ -5,10 +5,24 @@ ZONES=$(terraform output availability_zones|sed s/,//g | paste -s -d,)
 NAME=$(terraform output name_cluster)
 PRIVATE_SUBNETS=$(terraform output private_subnet_ids|sed s/,//g|paste -s -d,)
 PUBLIC_SUBNETS=$(terraform output public_subnet_ids|sed s/,//g|paste -s -d,)
+ssh-keygen -b 2048 -t rsa -f ~/.ssh/id_rsa_kops -q -N ""
 
-#kops get cluster ${NAME} --state $(terraform output state_store)
+kops get cluster ${NAME} --state $(terraform output state_store)
 
-  ssh-keygen -b 2048 -t rsa -f ~/.ssh/id_rsa_kops -q -N ""
+
+if [ "$?" == "0" ]; then
+  kops create secret \
+  --state $(terraform output state_store) \
+  --name ${NAME} \
+  sshpublickey admin -i ~/.ssh/id_rsa_kops.pub
+
+   kops update cluster ${NAME} \
+   --target=terraform \
+   --out=. \
+   --state=$(terraform output state_store)
+  echo "CLUSTER ALREADY DEFINED"
+  exit 0
+else
 
 
   kops create cluster \
@@ -23,8 +37,10 @@ PUBLIC_SUBNETS=$(terraform output public_subnet_ids|sed s/,//g|paste -s -d,)
       --subnets $PRIVATE_SUBNETS \
       --state $(terraform output state_store) \
       --out=. \
-      --name ${NAME} && \
-  kops create secret \
-  --state $(terraform output state_store) \
-  --name ${NAME} \
-  sshpublickey admin -i ~/.ssh/id_rsa_kops.pub
+      --name ${NAME}
+
+      kops create secret \
+      --state $(terraform output state_store) \
+      --name ${NAME} \
+      sshpublickey admin -i ~/.ssh/id_rsa_kops.pub
+fi
