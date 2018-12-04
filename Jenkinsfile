@@ -51,10 +51,10 @@ pipeline {
             }
         }
         stage("Deploy kops cluster") {
-          def status = "in progress"
           when {
                 expression { params.REQUESTED_ACTION == 'create' }
               }
+              def status = "in progress"
 
             steps {
               withCredentials([[$class: 'AmazonWebServicesCredentialsBinding', credentialsId: "${params.AWS_KEY_ID}"]]) {
@@ -66,11 +66,12 @@ pipeline {
             }
         }
         stage("Destroy cluster") {
-          def status = "destroyed"
 
           when {
                 expression { params.REQUESTED_ACTION == 'destroy' }
               }
+              def status = "destroyed"
+
             steps {
               withCredentials([[$class: 'AmazonWebServicesCredentialsBinding', credentialsId: "${params.AWS_KEY_ID}"]]) {
                 ansiColor('xterm') {
@@ -82,10 +83,11 @@ pipeline {
             }
         }
         stage("Verify cluster") {
-          def status = "ready"
           when {
                 expression { params.REQUESTED_ACTION == 'verify' }
               }
+              def status = "ready"
+
             steps {
               withCredentials([[$class: 'AmazonWebServicesCredentialsBinding', credentialsId: "${params.AWS_KEY_ID}"]]) {
                 ansiColor('xterm') {
