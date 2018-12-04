@@ -51,7 +51,7 @@ pipeline {
             }
         }
         stage("Deploy kops cluster") {
-          status = "in progress"
+          def status = "in progress"
           when {
                 expression { params.REQUESTED_ACTION == 'create' }
               }
@@ -66,7 +66,7 @@ pipeline {
             }
         }
         stage("Destroy cluster") {
-          status = "destroyed"
+          def status = "destroyed"
 
           when {
                 expression { params.REQUESTED_ACTION == 'destroy' }
@@ -82,7 +82,7 @@ pipeline {
             }
         }
         stage("Verify cluster") {
-          status = "ready"
+          def status = "ready"
           when {
                 expression { params.REQUESTED_ACTION == 'verify' }
               }
