@@ -65,3 +65,12 @@ For creating the cluster:
 
 For destroy the cluster:
   Just run it with "Destroy"
+
+### Known Bugs:
+On destroy:
+* module.vpc.output.vpc_id: variable "default" is nil, but no error was reported
+
+The destroy does work, though. But the build is marked as failed for this.
+
+
+  Enjoy!
